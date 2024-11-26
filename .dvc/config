@@ -1,0 +1,5 @@
+[core]
+    analytics = false
+    remote = gdrive_remote
+['remote "gdrive_remote"']
+    url = gdrive://1V5TOLZpQ1dP2zaQ1cCsKZIJIKgQW2zfH

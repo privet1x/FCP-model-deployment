@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: my-asi-package
+Version: 0.1.0
+Summary: My cool ASI package
+Author: Anton Pazniak
+Author-email: s22326@pjwstk.edu.pl
+Requires-Python: >=3.6
