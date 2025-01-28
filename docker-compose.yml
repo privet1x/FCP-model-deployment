@@ -1,0 +1,41 @@
+version: '3'
+services:
+  ansible_control:
+    build:
+      context: .
+      dockerfile: ansible/Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./ansible/keys:/root/.ssh
+    networks:
+      - ansible-net
+    command: tail -f /dev/null
+
+  target_host:
+    image: ubuntu:22.04
+    privileged: true
+    command: >
+      sh -c "apt-get update && apt-get install -y openssh-server sudo docker.io python3-pip &&
+      mkdir /run/sshd &&
+      useradd -m -s /bin/bash ansible &&
+      echo 'ansible:password' | chpasswd &&
+      echo 'ansible ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ansible &&
+      mkdir -p /home/ansible/.ansible/tmp &&
+      chown -R ansible:ansible /home/ansible &&
+      chmod -R 700 /home/ansible/.ansible/tmp &&
+      pip3 install requests &&
+      /usr/sbin/sshd -D"
+    ports:
+      - "2222:22"
+    networks:
+      - ansible-net
+    volumes:
+      - ./ansible:/ansible
+      - ./ansible/keys/id_rsa.pub:/home/ansible/.ssh/authorized_keys
+
+
+
+
+
+networks:
+  ansible-net:
