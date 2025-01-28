@@ -1,0 +1,20 @@
+- name: Deploy Application
+  hosts: all
+  tasks:
+    - name: Build application image
+      community.docker.docker_image:
+        name: asi-app
+        build:
+          path: /ansible
+          dockerfile: Dockerfile.app
+        source: build
+
+    - name: Run application container
+      community.docker.docker_container:
+        name: asi-app
+        image: asi-app
+        state: started
+        ports:
+          - "8000:8000"
+        networks:
+          - name: ansible-net
